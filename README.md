@@ -1,369 +1,348 @@
-# 🤖 FiveM Bot - Kullanım Kılavuzu
+# FiveM Bot - Kurumsal Kullanım Kılavuzu
 
-## 📋 İçindekiler
-- [Genel Bakış](#genel-bakış)
-- [Kurulum](#kurulum)
-- [Komutlar](#komutlar)
-- [Yetki Sistemi](#yetki-sistemi)
-- [Ayarlar Paneli](#ayarlar-paneli)
-- [Whitelist Sistemi](#whitelist-sistemi)
-- [Ticket Sistemi](#ticket-sistemi)
-- [Log Sistemi](#log-sistemi)
-- [İşletme/Oluşum/Departman](#işletmeoluşumdepartman)
+## Genel Bakış
 
----
+FiveM Bot, Discord sunucularında otomatik moderasyon, whitelist yönetimi, ticket sistemi ve kapsamlı log takibi sağlayan profesyonel bir bot sistemidir. Bu dokümantasyon, bot'un kurulumundan günlük kullanımına kadar tüm süreçleri kapsar.
 
-## 🎯 Genel Bakış
+## Sistem Gereksinimleri
 
-FiveM Bot, Discord sunucunuzda otomatik moderasyon, whitelist yönetimi, ticket sistemi ve log takibi sağlayan kapsamlı bir bot sistemidir.
+- Node.js 16.9.0 veya üzeri
+- MongoDB veritabanı erişimi
+- MySQL veritabanı erişimi
+- Discord Bot Token
+- Discord Developer Portal erişimi
 
-### ✨ Özellikler
-- 🎫 **Ticket Sistemi** - Destek talepleri için otomatik kanal oluşturma
-- 📝 **Whitelist Yönetimi** - Başvuru ve mülakat sistemi
-- 📊 **Log Sistemi** - Tüm sunucu aktivitelerini takip
-- 🏢 **İşletme/Oluşum/Departman** - Organizasyon yönetimi
-- 👥 **Rol Yönetimi** - Yetki sistemi kontrolü
-- 🛡️ **Moderasyon** - Ban/unban ve ceza sistemi
+## Kurulum Süreci
 
----
+### 1. Proje Kurulumu
+```bash
+git clone [repository-url]
+cd fivemBOT
+npm install
+```
 
-## 💬 Komutlar
+### 2. Konfigürasyon
+`core/config.js` dosyasını düzenleyerek gerekli ayarları yapılandırın:
+- Bot token ve client ID
+- Veritabanı bağlantı bilgileri
+- Sunucu ID ve rol ID'leri
+- Embed ayarları
 
-### 🔧 Yönetim Komutları
+### 3. Discord Bot Kurulumu
+1. Discord Developer Portal'da yeni uygulama oluşturun
+2. Bot sekmesinden token alın
+3. OAuth2 > URL Generator'dan gerekli izinleri seçin
+4. Bot'u sunucuya davet edin
 
-#### `/setup`
-**Açıklama:** Bot kurulum paneli  
-**Yetki:** Owner  
-**Kullanım:** Temel bot ayarlarını yapılandırır
+### 4. Komut Deploy
+```bash
+node deploy.js
+```
 
-#### `/settings`
-**Açıklama:** Bot ayarları görüntüleme paneli  
-**Yetki:** Owner  
-**Kullanım:** Detaylı ayarları görüntüler ve düzenler
+## Yetki Sistemi
 
-#### `/system`
-**Açıklama:** Sistem bilgileri  
-**Yetki:** Owner  
-**Kullanım:** Bot durumu ve sistem bilgilerini gösterir
+### Owner (En Yüksek Yetki)
+**Rol ID:** `1222303283385729044` (Değiştirilemez)
 
-#### `/topreset`
-**Açıklama:** Top istatistiklerini sıfırla  
-**Yetki:** Owner  
-**Kullanım:** Tüm istatistikleri sıfırlar
+**Yetkiler:**
+- Tüm bot ayarlarını değiştirme
+- Sistem yönetimi ve bakım
+- Diğer tüm rollere sahip olma
 
-### 🎫 Ticket Komutları
+**Komutlar:**
+- `/setup` - Bot kurulum paneli
+- `/settings` - Bot ayarları paneli
+- `/system` - Sistem bilgileri
+- `/topreset` - İstatistikleri sıfırlama
 
-#### `/ticketsetup`
-**Açıklama:** Ticket sistemi kurulumu  
-**Yetki:** Owner  
-**Kullanım:** Ticket kanalına kurulum mesajı gönderir
+### Staff (Yönetim)
+**Rol ID:** `1222303180088676412`
 
-### 🛡️ Moderasyon Komutları
+**Yetkiler:**
+- Ceza verme ve kaldırma
+- Rol yönetimi
+- Ticket yönetimi
+- Tüm istatistik komutları
+- Liderlik tablolarını görüntüleme
 
-#### `/ban`
-**Açıklama:** Kullanıcıyı yasakla  
-**Yetki:** Banhammer  
-**Kullanım:** `/ban @kullanıcı sebep`
+**Komutlar:**
+- `/ceza` - Ceza verme
+- `/cezakaldir` - Ceza kaldırma
+- `/rolver` - Rol verme
+- `/rolal` - Rol alma
+- `/rolkontrol` - Rol kontrolü
+- `/destekstats` - Destek istatistikleri
+- `/destektop` - Destek liderlik tablosu
+- `/başvurutop` - Başvuru liderlik tablosu
+- `/mülakattop` - Mülakat liderlik tablosu
+- `/icisimtop` - IC İsim liderlik tablosu
 
-#### `/unban`
-**Açıklama:** Yasak kaldır  
-**Yetki:** Banhammer  
-**Kullanım:** `/unban kullanıcı_id`
+### Supervisor (Denetim)
+**Rol ID:** `1222303138124533821`
 
-#### `/baninfo`
-**Açıklama:** Yasak bilgisi  
-**Yetki:** Staff  
-**Kullanım:** `/baninfo kullanıcı_id`
+**Yetkiler:**
+- Staff işlemlerini denetleme
+- Rapor görüntüleme
+- Tüm Staff yetkilerine sahip
 
-### 👥 Staff Komutları
+### Banhammer (Moderasyon)
+**Rol ID:** `1222599530315251773`
 
-#### `/ceza`
-**Açıklama:** Ceza ver  
-**Yetki:** Staff  
-**Kullanım:** `/ceza @kullanıcı sebep`
+**Yetkiler:**
+- Ban ve unban işlemleri
+- Yasak bilgisi sorgulama
 
-#### `/cezakaldir`
-**Açıklama:** Ceza kaldır  
-**Yetki:** Staff  
-**Kullanım:** `/cezakaldir @kullanıcı`
+**Komutlar:**
+- `/ban` - Kullanıcı yasaklama
+- `/unban` - Yasak kaldırma
+- `/baninfo` - Yasak bilgisi
 
-#### `/rolver`
-**Açıklama:** Rol ver  
-**Yetki:** Staff  
-**Kullanım:** `/rolver @kullanıcı @rol`
+### Başvuru Sorumlusu
+**Rol ID:** `1424076465909137429`
 
-#### `/rolal`
-**Açıklama:** Rol al  
-**Yetki:** Staff  
-**Kullanım:** `/rolal @kullanıcı @rol`
+**Yetkiler:**
+- Başvuru işlemleri
+- Başvuru formu gönderme
+- Başvuru istatistikleri
 
-#### `/rolkontrol`
-**Açıklama:** Rol kontrol et  
-**Yetki:** Staff  
-**Kullanım:** `/rolkontrol @kullanıcı`
+**Komutlar:**
+- `/basvuruform` - Başvuru formu gönderme
+- `/başvurustats` - Başvuru istatistikleri
 
-### 📝 Whitelist Komutları
+### Mülakat Sorumlusu
+**Rol ID:** `1424076472422895746`
 
-#### `/başvuru`
-**Açıklama:** Başvuru yap  
-**Yetki:** Herkes  
-**Kullanım:** Whitelist başvurusu yapar
-
-#### `/basvuruform`
-**Açıklama:** Başvuru formu gönder  
-**Yetki:** Staff  
-**Kullanım:** Başvuru formu gönderir
-
-#### `/mülakat`
-**Açıklama:** Mülakat yap  
-**Yetki:** Mülakat Sorumlusu  
-**Kullanım:** `/mülakat @kullanıcı sonuç`
-
-### 📊 İstatistik Komutları
-
-#### `/destekstats`
-**Açıklama:** Destek istatistikleri  
-**Yetki:** Staff  
-**Kullanım:** Ticket istatistiklerini gösterir
-
-#### `/başvurustats`
-**Açıklama:** Başvuru istatistikleri  
-**Yetki:** Staff  
-**Kullanım:** Başvuru istatistiklerini gösterir
-
-#### `/mülakatstats`
-**Açıklama:** Mülakat istatistikleri  
-**Yetki:** Staff  
-**Kullanım:** Mülakat istatistiklerini gösterir
-
-### 🏢 Organizasyon Komutları
-
-#### `/işletme`
-**Açıklama:** İşletme oluştur  
-**Yetki:** İşletme Müdürü  
-**Kullanım:** Yeni işletme oluşturur
-
-#### `/olusum`
-**Açıklama:** Oluşum oluştur  
-**Yetki:** Boss  
-**Kullanım:** Yeni oluşum oluşturur
-
-#### `/departman`
-**Açıklama:** Departman oluştur  
-**Yetki:** High Command  
-**Kullanım:** Yeni departman oluşturur
-
----
-
-## 👑 Yetki Sistemi
-
-### 🔴 Owner (En Yüksek Yetki)
-- **Rol ID:** `1222303283385729044`
-- **Yetkiler:**
-  - Tüm bot ayarlarını değiştirme
-  - Sistem yönetimi
-  - Diğer tüm rollere sahip
-- **Komutlar:** `/setup`, `/settings`, `/system`, `/topreset`
-
-### 🟠 Staff (Yönetim)
-- **Rol ID:** `1222303180088676412`
-- **Yetkiler:**
-  - Ceza verme/kaldırma
-  - Rol yönetimi
-  - Ticket yönetimi
-  - İstatistik görüntüleme
-- **Komutlar:** `/ceza`, `/cezakaldir`, `/rolver`, `/rolal`, `/rolkontrol`, `/destekstats`
-
-### 🟡 Supervisor (Denetim)
-- **Rol ID:** `1222303138124533821`
-- **Yetkiler:**
-  - Staff işlemlerini denetleme
-  - Rapor görüntüleme
-- **Komutlar:** Tüm Staff komutları + denetim yetkileri
-
-### 🔵 Banhammer (Moderasyon)
-- **Rol ID:** `1222599530315251773`
-- **Yetkiler:**
-  - Ban/unban işlemleri
-  - Yasak bilgisi sorgulama
-- **Komutlar:** `/ban`, `/unban`, `/baninfo`
-
-### 🟢 Başvuru Sorumlusu
-- **Rol ID:** `1424076465909137429`
-- **Yetkiler:**
-  - Başvuru işlemleri
-  - Başvuru formu gönderme
-  - Başvuru istatistikleri
-- **Komutlar:** `/basvuruform`, `/başvurustats`
-
-### 🟣 Mülakat Sorumlusu
-- **Rol ID:** `1424076472422895746`
-- **Yetkiler:**
-  - Mülakat yapma
-  - Mülakat istatistikleri
-- **Komutlar:** `/mülakat`, `/mülakatstats`
-
----
-
-## ⚙️ Ayarlar Paneli
-
-### 🔧 Bot Ayarları (`/settings`)
-- **Bot Status:** Online, Idle, DND durumu
-- **Activity:** Bot aktivite ayarları
-- **Embed Settings:** Renk, ikon, footer ayarları
-
-### 🔗 Link Ayarları
-- **Discord Link:** Sunucu davet linki
-- **Website:** Web sitesi linki
-- **Connect:** Bağlantı linki
-- **Form:** Form linki
-
-### 👥 Rol Ayarları
-- **Staff Rolü:** Yönetim yetkisi
-- **Supervisor Rolü:** Denetim yetkisi
-- **Banhammer Rolü:** Moderasyon yetkisi
-- **Başvuru Rolü:** Başvuru işlemleri
-- **Mülakat Rolü:** Mülakat işlemleri
-- **Owner Rolü:** ⚠️ Değiştirilemez
-
-### 📡 Kanal Ayarları
-- **Log Kanalları:** Tüm log türleri
-- **Ticket Kategorisi:** Ticket kanalları
-- **Whitelist Kanalları:** Başvuru ve mülakat
-
----
-
-## 📝 Whitelist Sistemi
-
-### 🎯 Amaç
-Sunucuya katılmak isteyen oyuncuların başvuru sürecini yönetir.
-
-### 📋 Süreç
-1. **Başvuru:** Oyuncu `/başvuru` komutu ile başvuru yapar
-2. **İnceleme:** Başvuru Sorumlusu başvuruyu inceler
-3. **Mülakat:** Onaylanan başvurular mülakata alınır
-4. **Sonuç:** Mülakat sonucuna göre oyuncu kabul/reddedilir
-
-### 🔄 Roller
-- **Kayıtsız:** Başvuru yapmamış oyuncular
-- **Kayıtlı:** Başvuru yapmış oyuncular
-- **Onaylı:** Başvurusu onaylanmış oyuncular
-- **Reddedilmiş:** Başvurusu reddedilmiş oyuncular
-
-### 📊 İstatistikler
-- Başvuru sayıları
+**Yetkiler:**
+- Mülakat yapma
 - Mülakat istatistikleri
-- Top başvuru yapanlar
-- IC İsim kullanım istatistikleri
 
----
+**Komutlar:**
+- `/mülakat` - Mülakat yapma
+- `/mülakatstats` - Mülakat istatistikleri
 
-## 🎫 Ticket Sistemi
+### IC İsim Rolü
+**Rol ID:** Whitelist ayarlarından belirlenir
 
-### 🎯 Amaç
-Kullanıcıların destek taleplerini organize etmek.
+**Yetkiler:**
+- IC İsim onaylama/reddetme
+- IC İsim istatistikleri
 
-### 📋 Özellikler
-- **Otomatik Kanal Oluşturma:** Her ticket için özel kanal
-- **Yetkili Atama:** Staff otomatik atanır
-- **Kapatma/Reopen:** Ticket yönetimi
-- **Transfer:** Farklı staff'a devretme
-- **Silme:** Gereksiz ticket'ları silme
+**Komutlar:**
+- `/icisimstats` - IC İsim istatistikleri
 
-### 👥 Yetkiler
-- **Ticket Oluşturma:** Herkes
-- **Ticket Yönetimi:** Staff
-- **Ticket Silme:** Sadece Staff
+## Temel Kurulum Komutları
 
-### 📊 İstatistikler
-- Açık ticket sayısı
-- Top ticket açanlar
-- Staff performans istatistikleri
+### /setup Komutu
+Bot'un temel kurulumunu yapmak için kullanılır. Owner yetkisi gereklidir.
 
----
+**Kullanım:**
+1. `/setup` komutunu çalıştırın
+2. Açılan panelde gerekli ayarları seçin:
+   - Log Ayarları
+   - Ticket Ayarları
+   - Whitelist Ayarları
+   - İşletme Ayarları
+   - Oluşum Ayarları
+   - Departman Ayarları
 
-## 📊 Log Sistemi
+**Önemli Notlar:**
+- Log kanalları otomatik olarak oluşturulur
+- Her ayar kategorisi için ayrı butonlar bulunur
+- Ayarlar config dosyasına otomatik kaydedilir
 
-### 📋 Log Türleri
-- **Join/Leave:** Katılım/ayrılış logları
-- **Invite:** Davet logları
-- **Autorole:** Otomatik rol logları
-- **Supervision:** Denetim logları
-- **Business:** İşletme logları
-- **Department:** Departman logları
-- **Organization:** Oluşum logları
-- **Role:** Rol değişiklik logları
-- **Interview:** Mülakat logları
-- **Application:** Başvuru logları
-- **Punishments:** Ceza logları
-- **Ban/Unban:** Yasak logları
-- **IC Name:** IC İsim logları
-- **Error:** Hata logları
+### /settings Komutu
+Detaylı bot ayarlarını görüntülemek ve düzenlemek için kullanılır. Owner yetkisi gereklidir.
 
-### 🔧 Kurulum
-1. `/setup` komutu ile Log Ayarları'na tıklayın
-2. "Log Kanalları Oluştur" butonuna basın
+**Kullanım:**
+1. `/settings` komutunu çalıştırın
+2. Açılan panelde ayar kategorilerini seçin:
+   - Bot Ayarları
+   - Link Ayarları
+   - Embed Ayarları
+   - Sunucu Ayarları
+   - Rol Ayarları
+   - Kanal Ayarları
+
+## Sistem Yönetimi
+
+### /system Komutu
+Bot durumu ve sistem bilgilerini gösterir. Owner yetkisi gereklidir.
+
+**Görüntülenen Bilgiler:**
+- Bot durumu (Online/Offline)
+- Veritabanı bağlantı durumu
+- Sistem performans bilgileri
+- Aktif kullanıcı sayısı
+
+### /topreset Komutu
+Tüm istatistikleri sıfırlar. Owner yetkisi gereklidir.
+
+**Uyarı:** Bu işlem geri alınamaz ve tüm istatistik verilerini siler.
+
+## Ticket Sistemi
+
+### Kurulum
+1. `/setup` > Ticket Ayarları
+2. Kategori ID ve Staff rolü ayarlayın
+3. `/ticketsetup` komutu ile ticket kanalına mesaj gönderin
+
+### Kullanım
+- Kullanıcılar ticket butonuna tıklayarak destek talebi oluşturur
+- Otomatik olarak özel kanal oluşturulur
+- Staff üyeleri ticket'ları yönetebilir
+
+## Whitelist Sistemi
+
+### Başvuru Süreci
+1. Kullanıcı `/başvuru` komutu ile başvuru yapar
+2. Başvuru Sorumlusu başvuruyu inceler
+3. Onaylanan başvurular mülakata alınır
+4. Mülakat Sorumlusu mülakat yapar
+5. Sonuç kullanıcıya bildirilir
+
+### Roller
+- Kayıtsız: Başvuru yapmamış kullanıcılar
+- Kayıtlı: Başvuru yapmış kullanıcılar
+- Onaylı: Başvurusu onaylanmış kullanıcılar
+- Reddedilmiş: Başvurusu reddedilmiş kullanıcılar
+
+## Log Sistemi
+
+### Log Türleri
+- Join/Leave: Katılım ve ayrılış logları
+- Invite: Davet logları
+- Autorole: Otomatik rol logları
+- Supervision: Denetim logları
+- Business: İşletme logları
+- Department: Departman logları
+- Organization: Oluşum logları
+- Role: Rol değişiklik logları
+- Interview: Mülakat logları
+- Application: Başvuru logları
+- Punishments: Ceza logları
+- Ban/Unban: Yasak logları
+- IC Name: IC İsim logları
+- Error: Hata logları
+
+### Kurulum
+1. `/setup` > Log Ayarları
+2. "Log Kanalları Oluştur" butonuna tıklayın
 3. Otomatik olarak kategori ve kanallar oluşturulur
 
----
+## Organizasyon Yönetimi
 
-## 🏢 İşletme/Oluşum/Departman
-
-### 🏢 İşletme Sistemi
+### İşletme Sistemi
 - **Yetki:** İşletme Müdürü
-- **Kategori:** İşletme kanalları için
 - **Komut:** `/işletme`
+- **Amaç:** İşletme organizasyonlarını yönetme
 
-### 🏛️ Oluşum Sistemi
+### Oluşum Sistemi
 - **Yetki:** Boss
-- **Kategori:** Oluşum kanalları için
 - **Komut:** `/olusum`
+- **Amaç:** Oluşum organizasyonlarını yönetme
 
-### 🏢 Departman Sistemi
+### Departman Sistemi
 - **Yetki:** High Command
-- **Kategori:** Departman kanalları için
 - **Komut:** `/departman`
+- **Amaç:** Departman organizasyonlarını yönetme
 
-### ⚙️ Kurulum
-1. `/setup` komutu ile ilgili ayarlara gidin
-2. Kategori ve rol ID'lerini ayarlayın
-3. Sistem otomatik olarak çalışmaya başlar
+## İstatistik Sistemi
 
----
+### Kişisel İstatistikler
+- **Destek İstatistikleri:** `/destekstats` (Staff)
+- **Başvuru İstatistikleri:** `/başvurustats` (Başvuru Sorumlusu)
+- **Mülakat İstatistikleri:** `/mülakatstats` (Mülakat Sorumlusu)
+- **IC İsim İstatistikleri:** `/icisimstats` (IC İsim Rolü)
 
-## 🚨 Hata Giderme
+### Liderlik Tabloları
+- **Destek Liderliği:** `/destektop` (Staff)
+- **Başvuru Liderliği:** `/başvurutop` (Staff)
+- **Mülakat Liderliği:** `/mülakattop` (Staff)
+- **IC İsim Liderliği:** `/icisimtop` (Staff)
 
-### ❌ Yaygın Hatalar
+## Moderasyon Komutları
+
+### Ceza Sistemi
+- `/ceza @kullanıcı sebep` - Ceza verme (Staff)
+- `/cezakaldir @kullanıcı` - Ceza kaldırma (Staff)
+
+### Rol Yönetimi
+- `/rolver @kullanıcı @rol` - Rol verme (Staff)
+- `/rolal @kullanıcı @rol` - Rol alma (Staff)
+- `/rolkontrol @kullanıcı` - Rol kontrolü (Staff)
+
+### Yasak Sistemi
+- `/ban @kullanıcı sebep` - Yasaklama (Banhammer)
+- `/unban kullanıcı_id` - Yasak kaldırma (Banhammer)
+- `/baninfo kullanıcı_id` - Yasak bilgisi (Banhammer)
+
+## Hata Giderme
+
+### Yaygın Sorunlar
 
 #### "Yetki Bulunamadı" Hatası
-- **Çözüm:** Rol ID'lerini kontrol edin
-- **Kontrol:** `/settings` > Rol Ayarları
+- Rol ID'lerini kontrol edin
+- `/settings` > Rol Ayarları'ndan doğruluğunu onaylayın
 
 #### "Kanal Bulunamadı" Hatası
-- **Çözüm:** Kanal ID'lerini kontrol edin
-- **Kontrol:** `/setup` > Log Ayarları
+- Kanal ID'lerini kontrol edin
+- `/setup` > Log Ayarları'ndan yeniden oluşturun
 
 #### Bot Yanıt Vermiyor
-- **Çözüm:** Bot izinlerini kontrol edin
-- **Kontrol:** Discord Developer Portal
+- Bot izinlerini kontrol edin
+- Discord Developer Portal'dan izinleri yenileyin
+- Bot token'ının doğru olduğundan emin olun
 
-### 📞 Destek
-- **Discord:** [Sunucu Davet Linki]
-- **Website:** [Web Sitesi]
-- **Email:** [İletişim Email]
+#### Veritabanı Bağlantı Hatası
+- MongoDB ve MySQL bağlantı bilgilerini kontrol edin
+- Veritabanı sunucularının çalıştığından emin olun
+- Firewall ayarlarını kontrol edin
 
----
+## Güvenlik
 
-## 📄 Lisans
+### Önemli Notlar
+- Owner rolü değiştirilemez
+- Tüm ayarlar config dosyasında saklanır
+- Yetki kontrolü her komutta yapılır
+- Log sistemi tüm işlemleri kaydeder
+
+### Backup
+- Config dosyasını düzenli olarak yedekleyin
+- Veritabanı backup'larını alın
+- Bot token'ını güvenli yerde saklayın
+
+## Performans Optimizasyonu
+
+### Öneriler
+- Log kanallarını düzenli olarak temizleyin
+- Eski ticket'ları arşivleyin
+- Veritabanı indekslerini optimize edin
+- Bot'u güvenilir bir sunucuda çalıştırın
+
+## Destek
+
+### Teknik Destek
+- Discord: [Sunucu Davet Linki]
+- Website: [Web Sitesi]
+- Email: [İletişim Email]
+
+### Dokümantasyon
+- Bu README dosyası güncel tutulur
+- Komut değişiklikleri burada belgelenir
+- Yeni özellikler detaylandırılır
+
+## Lisans
+
 Bu proje özel kullanım içindir. Tüm hakları saklıdır.
 
----
+## Sürüm Geçmişi
 
-## 👥 Katkıda Bulunanlar
-- **Geliştirici:** [İsim]
-- **Tasarım:** [İsim]
-- **Test:** [İsim]
+- v1.0.0 - İlk sürüm
+- v1.1.0 - Whitelist sistemi eklendi
+- v1.2.0 - Organizasyon yönetimi eklendi
+- v1.3.0 - İstatistik sistemi geliştirildi
 
 ---
 
 *Son güncelleme: 2025*
+*Dokümantasyon versiyonu: 1.0*
