@@ -195,19 +195,22 @@ Tüm istatistikleri sıfırlar. Owner yetkisi gereklidir.
 ## Organizasyon Yönetimi
 
 ### İşletme Sistemi
-- **Yetki:** İşletme Müdürü
+- **Yetki:** Supervisor
 - **Komut:** `/işletme`
 - **Amaç:** İşletme organizasyonlarını yönetme
+- **Alt Komutlar:** `oluştur`, `sil`, `üyeekle`, `üyeçıkar`
 
 ### Oluşum Sistemi
-- **Yetki:** Boss
+- **Yetki:** Supervisor
 - **Komut:** `/olusum`
 - **Amaç:** Oluşum organizasyonlarını yönetme
+- **Alt Komutlar:** `oluştur`, `sil`, `üyeekle`, `üyeçıkar`
 
 ### Departman Sistemi
-- **Yetki:** High Command
+- **Yetki:** Supervisor
 - **Komut:** `/departman`
 - **Amaç:** Departman organizasyonlarını yönetme
+- **Alt Komutlar:** `oluştur`, `sil`, `üyeekle`, `üyeçıkar`
 
 ## İstatistik Sistemi
 
