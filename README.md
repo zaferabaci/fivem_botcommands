@@ -27,41 +27,6 @@ FiveM Bot, Discord sunucunuzda otomatik moderasyon, whitelist yönetimi, ticket 
 
 ---
 
-## 🚀 Kurulum
-
-### 1. Gereksinimler
-- Node.js 16.9.0 veya üzeri
-- MongoDB veritabanı
-- MySQL veritabanı
-- Discord Bot Token
-
-### 2. Kurulum Adımları
-```bash
-# Projeyi klonlayın
-git clone [repository-url]
-
-# Bağımlılıkları yükleyin
-npm install
-
-# Config dosyasını düzenleyin
-cp core/config.js.example core/config.js
-
-# Botu başlatın
-node .
-```
-
-### 3. Discord Kurulumu
-1. Discord Developer Portal'da yeni bot oluşturun
-2. Bot token'ını `core/config.js` dosyasına ekleyin
-3. Gerekli izinleri verin:
-   - `Send Messages`
-   - `Manage Channels`
-   - `Manage Roles`
-   - `Embed Links`
-   - `Read Message History`
-
----
-
 ## 💬 Komutlar
 
 ### 🔧 Yönetim Komutları
