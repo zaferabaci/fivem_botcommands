@@ -1,43 +1,6 @@
-# FiveM Bot - Kurumsal Kullanım Kılavuzu
-
 ## Genel Bakış
 
 FiveM Bot, Discord sunucularında otomatik moderasyon, whitelist yönetimi, ticket sistemi ve kapsamlı log takibi sağlayan profesyonel bir bot sistemidir. Bu dokümantasyon, bot'un kurulumundan günlük kullanımına kadar tüm süreçleri kapsar.
-
-## Sistem Gereksinimleri
-
-- Node.js 16.9.0 veya üzeri
-- MongoDB veritabanı erişimi
-- MySQL veritabanı erişimi
-- Discord Bot Token
-- Discord Developer Portal erişimi
-
-## Kurulum Süreci
-
-### 1. Proje Kurulumu
-```bash
-git clone [repository-url]
-cd fivemBOT
-npm install
-```
-
-### 2. Konfigürasyon
-`core/config.js` dosyasını düzenleyerek gerekli ayarları yapılandırın:
-- Bot token ve client ID
-- Veritabanı bağlantı bilgileri
-- Sunucu ID ve rol ID'leri
-- Embed ayarları
-
-### 3. Discord Bot Kurulumu
-1. Discord Developer Portal'da yeni uygulama oluşturun
-2. Bot sekmesinden token alın
-3. OAuth2 > URL Generator'dan gerekli izinleri seçin
-4. Bot'u sunucuya davet edin
-
-### 4. Komut Deploy
-```bash
-node deploy.js
-```
 
 ## Yetki Sistemi
 
@@ -287,49 +250,6 @@ Tüm istatistikleri sıfırlar. Owner yetkisi gereklidir.
 #### "Kanal Bulunamadı" Hatası
 - Kanal ID'lerini kontrol edin
 - `/setup` > Log Ayarları'ndan yeniden oluşturun
-
-#### Bot Yanıt Vermiyor
-- Bot izinlerini kontrol edin
-- Discord Developer Portal'dan izinleri yenileyin
-- Bot token'ının doğru olduğundan emin olun
-
-#### Veritabanı Bağlantı Hatası
-- MongoDB ve MySQL bağlantı bilgilerini kontrol edin
-- Veritabanı sunucularının çalıştığından emin olun
-- Firewall ayarlarını kontrol edin
-
-## Güvenlik
-
-### Önemli Notlar
-- Owner rolü değiştirilemez
-- Tüm ayarlar config dosyasında saklanır
-- Yetki kontrolü her komutta yapılır
-- Log sistemi tüm işlemleri kaydeder
-
-### Backup
-- Config dosyasını düzenli olarak yedekleyin
-- Veritabanı backup'larını alın
-- Bot token'ını güvenli yerde saklayın
-
-## Performans Optimizasyonu
-
-### Öneriler
-- Log kanallarını düzenli olarak temizleyin
-- Eski ticket'ları arşivleyin
-- Veritabanı indekslerini optimize edin
-- Bot'u güvenilir bir sunucuda çalıştırın
-
-## Destek
-
-### Teknik Destek
-- Discord: [Sunucu Davet Linki]
-- Website: [Web Sitesi]
-- Email: [İletişim Email]
-
-### Dokümantasyon
-- Bu README dosyası güncel tutulur
-- Komut değişiklikleri burada belgelenir
-- Yeni özellikler detaylandırılır
 
 ## Lisans
 
