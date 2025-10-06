@@ -1,591 +1,404 @@
-# 🎮 FivemBOT Komut Rehberi
+# 🤖 FiveM Bot - Kullanım Kılavuzu
 
 ## 📋 İçindekiler
-- [🏢 İşletme Komutları](#-işletme-komutları)
-- [🏛️ Departman Komutları](#️-departman-komutları)
-- [🏭 Organizasyon Komutları](#-organizasyon-komutları)
-- [👥 Personel Komutları](#-personel-komutları)
-- [🎫 Ticket Sistemi](#-ticket-sistemi)
-- [📝 Beyaz Liste Komutları](#-beyaz-liste-komutları)
-- [⚙️ Panel Komutları](#️-panel-komutları)
-- [📊 İstatistik Komutları](#-istatistik-komutları)
+- [Genel Bakış](#genel-bakış)
+- [Kurulum](#kurulum)
+- [Komutlar](#komutlar)
+- [Yetki Sistemi](#yetki-sistemi)
+- [Ayarlar Paneli](#ayarlar-paneli)
+- [Whitelist Sistemi](#whitelist-sistemi)
+- [Ticket Sistemi](#ticket-sistemi)
+- [Log Sistemi](#log-sistemi)
+- [İşletme/Oluşum/Departman](#işletmeoluşumdepartman)
 
 ---
 
-## 🏢 İşletme Komutları
+## 🎯 Genel Bakış
 
-### `/işletmeolustur`
-**Açıklama:** Yeni bir işletme oluşturur ve gerekli roller ile kanalları ayarlar.
+FiveM Bot, Discord sunucunuzda otomatik moderasyon, whitelist yönetimi, ticket sistemi ve log takibi sağlayan kapsamlı bir bot sistemidir.
 
-**Yetki:** `Supervisor` rolü gerekli
-
-**Parametreler:**
-- `isletmeadi` (zorunlu) - İşletme adı
-- `yönetici` (zorunlu) - İşletme yöneticisi kullanıcısı
-- `renk` (zorunlu) - Rol rengi (hex kod: FF0000)
-
-**Kullanım Örneği:**
-```
-/işletmeolustur isletmeadi:Burger Palace yönetici:@kullanici renk:FF5733
-```
-
-**Ne Yapar:**
-- İşletme adında yeni rol oluşturur
-- Yöneticiye işletme rolü verir
-- İşletme için özel kanal oluşturur
-- Veritabanına kayıt yapar
-- İşlem loglarını tutar
+### ✨ Özellikler
+- 🎫 **Ticket Sistemi** - Destek talepleri için otomatik kanal oluşturma
+- 📝 **Whitelist Yönetimi** - Başvuru ve mülakat sistemi
+- 📊 **Log Sistemi** - Tüm sunucu aktivitelerini takip
+- 🏢 **İşletme/Oluşum/Departman** - Organizasyon yönetimi
+- 👥 **Rol Yönetimi** - Yetki sistemi kontrolü
+- 🛡️ **Moderasyon** - Ban/unban ve ceza sistemi
 
 ---
 
-### `/işletmeüyeekle`
-**Açıklama:** Mevcut bir işletmeye üye ekler.
+## 🚀 Kurulum
 
-**Yetki:** `Supervisor` rolü gerekli
+### 1. Gereksinimler
+- Node.js 16.9.0 veya üzeri
+- MongoDB veritabanı
+- MySQL veritabanı
+- Discord Bot Token
 
-**Parametreler:**
-- `kullanıcı` (zorunlu) - Eklenecek kullanıcı
-- `işletme` (zorunlu) - İşletme adı (otomatik tamamlama)
+### 2. Kurulum Adımları
+```bash
+# Projeyi klonlayın
+git clone [repository-url]
 
-**Kullanım Örneği:**
+# Bağımlılıkları yükleyin
+npm install
+
+# Config dosyasını düzenleyin
+cp core/config.js.example core/config.js
+
+# Botu başlatın
+node .
 ```
-/işletmeüyeekle kullanıcı:@yeniüye işletme:Burger Palace
-```
 
-**Ne Yapar:**
-- Kullanıcıya işletme rolü verir
-- Veritabanında üye listesini günceller
-- İşlem loglarını tutar
+### 3. Discord Kurulumu
+1. Discord Developer Portal'da yeni bot oluşturun
+2. Bot token'ını `core/config.js` dosyasına ekleyin
+3. Gerekli izinleri verin:
+   - `Send Messages`
+   - `Manage Channels`
+   - `Manage Roles`
+   - `Embed Links`
+   - `Read Message History`
 
 ---
 
-### `/işletmeüyeçıkar`
-**Açıklama:** İşletmeden üye çıkarır.
+## 💬 Komutlar
 
-**Yetki:** `Supervisor` rolü gerekli
+### 🔧 Yönetim Komutları
 
-**Parametreler:**
-- `kullanıcı` (zorunlu) - Çıkarılacak kullanıcı
-- `işletme` (zorunlu) - İşletme adı (otomatik tamamlama)
+#### `/setup`
+**Açıklama:** Bot kurulum paneli  
+**Yetki:** Owner  
+**Kullanım:** Temel bot ayarlarını yapılandırır
 
-**Kullanım Örneği:**
-```
-/işletmeüyeçıkar kullanıcı:@eskiüye işletme:Burger Palace
-```
+#### `/settings`
+**Açıklama:** Bot ayarları görüntüleme paneli  
+**Yetki:** Owner  
+**Kullanım:** Detaylı ayarları görüntüler ve düzenler
 
-**Ne Yapar:**
-- Kullanıcıdan işletme rolünü alır
-- Veritabanında üye listesini günceller
-- İşlem loglarını tutar
+#### `/system`
+**Açıklama:** Sistem bilgileri  
+**Yetki:** Owner  
+**Kullanım:** Bot durumu ve sistem bilgilerini gösterir
 
----
+#### `/topreset`
+**Açıklama:** Top istatistiklerini sıfırla  
+**Yetki:** Owner  
+**Kullanım:** Tüm istatistikleri sıfırlar
 
-### `/işletmesil`
-**Açıklama:** İşletmeleri listeler ve silme seçeneği sunar.
+### 🎫 Ticket Komutları
 
-**Yetki:** `Supervisor` rolü gerekli
+#### `/ticketsetup`
+**Açıklama:** Ticket sistemi kurulumu  
+**Yetki:** Owner  
+**Kullanım:** Ticket kanalına kurulum mesajı gönderir
 
-**Parametreler:** Yok
+### 🛡️ Moderasyon Komutları
 
-**Kullanım Örneği:**
-```
-/işletmesil
-```
+#### `/ban`
+**Açıklama:** Kullanıcıyı yasakla  
+**Yetki:** Banhammer  
+**Kullanım:** `/ban @kullanıcı sebep`
 
-**Ne Yapar:**
-- Mevcut işletmeleri dropdown menüde listeler
-- Seçilen işletmeyi tamamen siler
-- İşletme rolünü ve kanalını kaldırır
-- Tüm üyelerden işletme rollerini alır
+#### `/unban`
+**Açıklama:** Yasak kaldır  
+**Yetki:** Banhammer  
+**Kullanım:** `/unban kullanıcı_id`
 
----
+#### `/baninfo`
+**Açıklama:** Yasak bilgisi  
+**Yetki:** Staff  
+**Kullanım:** `/baninfo kullanıcı_id`
 
-## 🏛️ Departman Komutları
+### 👥 Staff Komutları
 
-### `/departmanolustur`
-**Açıklama:** Yeni bir departman oluşturur.
+#### `/ceza`
+**Açıklama:** Ceza ver  
+**Yetki:** Staff  
+**Kullanım:** `/ceza @kullanıcı sebep`
 
-**Yetki:** `Supervisor` rolü gerekli
+#### `/cezakaldir`
+**Açıklama:** Ceza kaldır  
+**Yetki:** Staff  
+**Kullanım:** `/cezakaldir @kullanıcı`
 
-**Parametreler:**
-- `departmanadi` (zorunlu) - Departman adı
-- `yönetici` (zorunlu) - Departman yöneticisi
-- `renk` (zorunlu) - Rol rengi (hex kod)
+#### `/rolver`
+**Açıklama:** Rol ver  
+**Yetki:** Staff  
+**Kullanım:** `/rolver @kullanıcı @rol`
 
-**Kullanım Örneği:**
-```
-/departmanolustur departmanadi:Polis Departmanı yönetici:@komiser renk:0000FF
-```
+#### `/rolal`
+**Açıklama:** Rol al  
+**Yetki:** Staff  
+**Kullanım:** `/rolal @kullanıcı @rol`
 
-**Ne Yapar:**
-- Departman rolü ve kanalı oluşturur
-- Yöneticiye departman rolü verir
-- Veritabanına kayıt yapar
+#### `/rolkontrol`
+**Açıklama:** Rol kontrol et  
+**Yetki:** Staff  
+**Kullanım:** `/rolkontrol @kullanıcı`
 
----
+### 📝 Whitelist Komutları
 
-### `/departmanüyeekle`
-**Açıklama:** Departmana üye ekler.
+#### `/başvuru`
+**Açıklama:** Başvuru yap  
+**Yetki:** Herkes  
+**Kullanım:** Whitelist başvurusu yapar
 
-**Yetki:** `Supervisor` rolü gerekli
+#### `/basvuruform`
+**Açıklama:** Başvuru formu gönder  
+**Yetki:** Staff  
+**Kullanım:** Başvuru formu gönderir
 
-**Parametreler:**
-- `kullanıcı` (zorunlu) - Eklenecek kullanıcı
-- `departman` (zorunlu) - Departman adı
+#### `/mülakat`
+**Açıklama:** Mülakat yap  
+**Yetki:** Mülakat Sorumlusu  
+**Kullanım:** `/mülakat @kullanıcı sonuç`
 
-**Kullanım Örneği:**
-```
-/departmanüyeekle kullanıcı:@polis departman:Polis Departmanı
-```
+### 📊 İstatistik Komutları
 
----
+#### `/destekstats`
+**Açıklama:** Destek istatistikleri  
+**Yetki:** Staff  
+**Kullanım:** Ticket istatistiklerini gösterir
 
-### `/departmanüyeçıkar`
-**Açıklama:** Departmandan üye çıkarır.
+#### `/başvurustats`
+**Açıklama:** Başvuru istatistikleri  
+**Yetki:** Staff  
+**Kullanım:** Başvuru istatistiklerini gösterir
 
-**Yetki:** `Supervisor` rolü gerekli
+#### `/mülakatstats`
+**Açıklama:** Mülakat istatistikleri  
+**Yetki:** Staff  
+**Kullanım:** Mülakat istatistiklerini gösterir
 
-**Parametreler:**
-- `kullanıcı` (zorunlu) - Çıkarılacak kullanıcı
-- `departman` (zorunlu) - Departman adı
+### 🏢 Organizasyon Komutları
 
-**Kullanım Örneği:**
-```
-/departmanüyeçıkar kullanıcı:@polisi departman:Polis Departmanı
-```
+#### `/işletme`
+**Açıklama:** İşletme oluştur  
+**Yetki:** İşletme Müdürü  
+**Kullanım:** Yeni işletme oluşturur
 
----
+#### `/olusum`
+**Açıklama:** Oluşum oluştur  
+**Yetki:** Boss  
+**Kullanım:** Yeni oluşum oluşturur
 
-### `/departmansil`
-**Açıklama:** Departmanları listeler ve silme seçeneği sunar.
-
-**Yetki:** `Supervisor` rolü gerekli
-
-**Parametreler:** Yok
-
-**Kullanım Örneği:**
-```
-/departmansil
-```
-
----
-
-## 🏭 Organizasyon Komutları
-
-### `/olusumolustur`
-**Açıklama:** Yeni bir organizasyon oluşturur.
-
-**Yetki:** `Supervisor` rolü gerekli
-
-**Parametreler:**
-- `olusumadi` (zorunlu) - Organizasyon adı
-- `yönetici` (zorunlu) - Organizasyon yöneticisi
-- `renk` (zorunlu) - Rol rengi (hex kod)
-
-**Kullanım Örneği:**
-```
-/olusumolustur olusumadi:Mafya Ailesi yönetici:@don renk:800080
-```
-
-**Ne Yapar:**
-- Organizasyon rolü ve kanalı oluşturur
-- Yöneticiye organizasyon rolü verir
-- Veritabanına kayıt yapar
+#### `/departman`
+**Açıklama:** Departman oluştur  
+**Yetki:** High Command  
+**Kullanım:** Yeni departman oluşturur
 
 ---
 
-### `/olusumüyeekle`
-**Açıklama:** Organizasyona üye ekler.
+## 👑 Yetki Sistemi
 
-**Yetki:** `Supervisor` rolü gerekli
+### 🔴 Owner (En Yüksek Yetki)
+- **Rol ID:** `1222303283385729044`
+- **Yetkiler:**
+  - Tüm bot ayarlarını değiştirme
+  - Sistem yönetimi
+  - Diğer tüm rollere sahip
+- **Komutlar:** `/setup`, `/settings`, `/system`, `/topreset`
 
-**Parametreler:**
-- `kullanıcı` (zorunlu) - Eklenecek kullanıcı
-- `olusum` (zorunlu) - Organizasyon adı
+### 🟠 Staff (Yönetim)
+- **Rol ID:** `1222303180088676412`
+- **Yetkiler:**
+  - Ceza verme/kaldırma
+  - Rol yönetimi
+  - Ticket yönetimi
+  - İstatistik görüntüleme
+- **Komutlar:** `/ceza`, `/cezakaldir`, `/rolver`, `/rolal`, `/rolkontrol`, `/destekstats`
 
-**Kullanım Örneği:**
-```
-/olusumüyeekle kullanıcı:@mafyaüyesi olusum:Mafya Ailesi
-```
+### 🟡 Supervisor (Denetim)
+- **Rol ID:** `1222303138124533821`
+- **Yetkiler:**
+  - Staff işlemlerini denetleme
+  - Rapor görüntüleme
+- **Komutlar:** Tüm Staff komutları + denetim yetkileri
 
----
+### 🔵 Banhammer (Moderasyon)
+- **Rol ID:** `1222599530315251773`
+- **Yetkiler:**
+  - Ban/unban işlemleri
+  - Yasak bilgisi sorgulama
+- **Komutlar:** `/ban`, `/unban`, `/baninfo`
 
-### `/olusumüyeçıkar`
-**Açıklama:** Organizasyondan üye çıkarır.
+### 🟢 Başvuru Sorumlusu
+- **Rol ID:** `1424076465909137429`
+- **Yetkiler:**
+  - Başvuru işlemleri
+  - Başvuru formu gönderme
+  - Başvuru istatistikleri
+- **Komutlar:** `/basvuruform`, `/başvurustats`
 
-**Yetki:** `Supervisor` rolü gerekli
-
-**Parametreler:**
-- `kullanıcı` (zorunlu) - Çıkarılacak kullanıcı
-- `olusum` (zorunlu) - Organizasyon adı
-
-**Kullanım Örneği:**
-```
-/olusumüyeçıkar kullanıcı:@mafyaüyesi olusum:Mafya Ailesi
-```
-
----
-
-### `/olusumsil`
-**Açıklama:** Organizasyonları listeler ve silme seçeneği sunar.
-
-**Yetki:** `Supervisor` rolü gerekli
-
-**Parametreler:** Yok
-
-**Kullanım Örneği:**
-```
-/olusumsil
-```
-
----
-
-## 👥 Personel Komutları
-
-### `/rolver`
-**Açıklama:** Kullanıcıya rol verir.
-
-**Yetki:** `Staff` rolü gerekli
-
-**Parametreler:**
-- `kullanici` (zorunlu) - Rol verilecek kullanıcı
-- `rol` (zorunlu) - Verilecek rol
-
-**Kullanım Örneği:**
-```
-/rolver kullanici:@yeniüye rol:@Vatandaş
-```
-
-**Ne Yapar:**
-- Kullanıcıya belirtilen rolü verir
-- İşlem loglarını tutar
-- Hata kontrolü yapar
+### 🟣 Mülakat Sorumlusu
+- **Rol ID:** `1424076472422895746`
+- **Yetkiler:**
+  - Mülakat yapma
+  - Mülakat istatistikleri
+- **Komutlar:** `/mülakat`, `/mülakatstats`
 
 ---
 
-### `/rolal`
-**Açıklama:** Kullanıcıdan rol alır.
+## ⚙️ Ayarlar Paneli
 
-**Yetki:** `Staff` rolü gerekli
+### 🔧 Bot Ayarları (`/settings`)
+- **Bot Status:** Online, Idle, DND durumu
+- **Activity:** Bot aktivite ayarları
+- **Embed Settings:** Renk, ikon, footer ayarları
 
-**Parametreler:**
-- `kullanici` (zorunlu) - Rolü alınacak kullanıcı
-- `rol` (zorunlu) - Alınacak rol
+### 🔗 Link Ayarları
+- **Discord Link:** Sunucu davet linki
+- **Website:** Web sitesi linki
+- **Connect:** Bağlantı linki
+- **Form:** Form linki
 
-**Kullanım Örneği:**
-```
-/rolal kullanici:@kullanici rol:@Vatandaş
-```
+### 👥 Rol Ayarları
+- **Staff Rolü:** Yönetim yetkisi
+- **Supervisor Rolü:** Denetim yetkisi
+- **Banhammer Rolü:** Moderasyon yetkisi
+- **Başvuru Rolü:** Başvuru işlemleri
+- **Mülakat Rolü:** Mülakat işlemleri
+- **Owner Rolü:** ⚠️ Değiştirilemez
 
-**Ne Yapar:**
-- Kullanıcıdan belirtilen rolü alır
-- İşlem loglarını tutar
-- Hata kontrolü yapar
+### 📡 Kanal Ayarları
+- **Log Kanalları:** Tüm log türleri
+- **Ticket Kategorisi:** Ticket kanalları
+- **Whitelist Kanalları:** Başvuru ve mülakat
+
+---
+
+## 📝 Whitelist Sistemi
+
+### 🎯 Amaç
+Sunucuya katılmak isteyen oyuncuların başvuru sürecini yönetir.
+
+### 📋 Süreç
+1. **Başvuru:** Oyuncu `/başvuru` komutu ile başvuru yapar
+2. **İnceleme:** Başvuru Sorumlusu başvuruyu inceler
+3. **Mülakat:** Onaylanan başvurular mülakata alınır
+4. **Sonuç:** Mülakat sonucuna göre oyuncu kabul/reddedilir
+
+### 🔄 Roller
+- **Kayıtsız:** Başvuru yapmamış oyuncular
+- **Kayıtlı:** Başvuru yapmış oyuncular
+- **Onaylı:** Başvurusu onaylanmış oyuncular
+- **Reddedilmiş:** Başvurusu reddedilmiş oyuncular
+
+### 📊 İstatistikler
+- Başvuru sayıları
+- Mülakat istatistikleri
+- Top başvuru yapanlar
+- IC İsim kullanım istatistikleri
 
 ---
 
 ## 🎫 Ticket Sistemi
 
-### `/ticketsetup`
-**Açıklama:** Ticket sistemi kurulum panelini oluşturur.
+### 🎯 Amaç
+Kullanıcıların destek taleplerini organize etmek.
 
-**Yetki:** `Owner` rolü gerekli
+### 📋 Özellikler
+- **Otomatik Kanal Oluşturma:** Her ticket için özel kanal
+- **Yetkili Atama:** Staff otomatik atanır
+- **Kapatma/Reopen:** Ticket yönetimi
+- **Transfer:** Farklı staff'a devretme
+- **Silme:** Gereksiz ticket'ları silme
 
-**Parametreler:**
-- `kanal` (zorunlu) - Ticket embedinin gönderileceği kanal
+### 👥 Yetkiler
+- **Ticket Oluşturma:** Herkes
+- **Ticket Yönetimi:** Staff
+- **Ticket Silme:** Sadece Staff
 
-**Kullanım Örneği:**
-```
-/ticketsetup kanal:#destek
-```
-
-**Ne Yapar:**
-- Belirtilen kanala ticket sistemi embedini gönderir
-- "Destek Talebi Oluştur" butonu ekler
-- "Sıkça Sorulan Sorular" butonu ekler
-- "Sunucuya Bağlan" link butonu ekler
-
----
-
-### `/destekstats`
-**Açıklama:** Bir kullanıcının destek istatistiklerini gösterir.
-
-**Yetki:** `Support` rolü gerekli
-
-**Parametreler:**
-- `kullanıcı` (zorunlu) - İstatistikleri görüntülenecek kullanıcı
-
-**Kullanım Örneği:**
-```
-/destekstats kullanıcı:@destekçi
-```
-
-**Ne Yapar:**
-- Toplam devraldığı talep sayısını gösterir
-- Toplam kapattığı talep sayısını gösterir
-- Ortalama yanıt süresini gösterir
+### 📊 İstatistikler
+- Açık ticket sayısı
+- Top ticket açanlar
+- Staff performans istatistikleri
 
 ---
 
-### `/destektop`
-**Açıklama:** En iyi destek performansını gösterir.
+## 📊 Log Sistemi
 
-**Yetki:** `Support` rolü gerekli
+### 📋 Log Türleri
+- **Join/Leave:** Katılım/ayrılış logları
+- **Invite:** Davet logları
+- **Autorole:** Otomatik rol logları
+- **Supervision:** Denetim logları
+- **Business:** İşletme logları
+- **Department:** Departman logları
+- **Organization:** Oluşum logları
+- **Role:** Rol değişiklik logları
+- **Interview:** Mülakat logları
+- **Application:** Başvuru logları
+- **Punishments:** Ceza logları
+- **Ban/Unban:** Yasak logları
+- **IC Name:** IC İsim logları
+- **Error:** Hata logları
 
-**Parametreler:** Yok
-
-**Kullanım Örneği:**
-```
-/destektop
-```
-
-**Ne Yapar:**
-- En çok talep alan destekçileri listeler
-- En hızlı yanıt veren destekçileri gösterir
-
----
-
-## 📝 Beyaz Liste Komutları
-
-### `/başvuru`
-**Açıklama:** Bir kullanıcının başvuru sonucunu bildirir.
-
-**Yetki:** `Application` rolü gerekli
-
-**Parametreler:**
-- `kullanıcı` (zorunlu) - İşlem yapılacak kullanıcı
-- `işlem` (zorunlu) - Başvuru sonucu (Onayla/Reddet)
-- `sebep` (opsiyonel) - Red sebebi (reddet seçildiyse zorunlu)
-
-**Kullanım Örneği:**
-```
-/başvuru kullanıcı:@başvurucu işlem:Onayla
-/başvuru kullanıcı:@başvurucu işlem:Reddet sebep:Eksik bilgi
-```
-
-**Ne Yapar:**
-- Başvuru onaylandığında: Mülakat rolü verir
-- Başvuru reddedildiğinde: Red rolü verir ve sebep loglar
-- İstatistik kayıtlarını günceller
-- Kullanıcıya DM gönderir
+### 🔧 Kurulum
+1. `/setup` komutu ile Log Ayarları'na tıklayın
+2. "Log Kanalları Oluştur" butonuna basın
+3. Otomatik olarak kategori ve kanallar oluşturulur
 
 ---
 
-### `/mülakat`
-**Açıklama:** Bir kullanıcının mülakat sonucunu bildirir.
+## 🏢 İşletme/Oluşum/Departman
 
-**Yetki:** `Interviewer` rolü gerekli
+### 🏢 İşletme Sistemi
+- **Yetki:** İşletme Müdürü
+- **Kategori:** İşletme kanalları için
+- **Komut:** `/işletme`
 
-**Parametreler:**
-- `kullanıcı` (zorunlu) - İşlem yapılacak kullanıcı
-- `işlem` (zorunlu) - Mülakat sonucu (Onayla/Reddet)
-- `sebep` (opsiyonel) - Red sebebi (reddet seçildiyse zorunlu)
+### 🏛️ Oluşum Sistemi
+- **Yetki:** Boss
+- **Kategori:** Oluşum kanalları için
+- **Komut:** `/olusum`
 
-**Kullanım Örneği:**
-```
-/mülakat kullanıcı:@aday işlem:Onayla
-/mülakat kullanıcı:@aday işlem:Reddet sebep:Roleplay yetersiz
-```
+### 🏢 Departman Sistemi
+- **Yetki:** High Command
+- **Kategori:** Departman kanalları için
+- **Komut:** `/departman`
 
-**Ne Yapar:**
-- Mülakat onaylandığında: Kayıtlı rol + Onay rolü verir
-- Mülakat reddedildiğinde: Red rolü verir
-- Kayıtsız rolünü kaldırır
-- İstatistik kayıtlarını günceller
-
----
-
-### `/basvuruform`
-**Açıklama:** Başvuru panelini görüntüler.
-
-**Yetki:** Herkes kullanabilir
-
-**Parametreler:** Yok
-
-**Kullanım Örneği:**
-```
-/basvuruform
-```
-
-**Ne Yapar:**
-- Başvuru formu embedini gönderir
-- "Başvuru Formunu Aç" butonu ekler
-- Başvuru kurallarını açıklar
+### ⚙️ Kurulum
+1. `/setup` komutu ile ilgili ayarlara gidin
+2. Kategori ve rol ID'lerini ayarlayın
+3. Sistem otomatik olarak çalışmaya başlar
 
 ---
 
-### `/başvurustats`
-**Açıklama:** Bir kullanıcının başvuru istatistiklerini gösterir.
+## 🚨 Hata Giderme
 
-**Yetki:** `Staff` rolü gerekli
+### ❌ Yaygın Hatalar
 
-**Parametreler:**
-- `kullanıcı` (zorunlu) - İstatistikleri görüntülenecek kullanıcı
+#### "Yetki Bulunamadı" Hatası
+- **Çözüm:** Rol ID'lerini kontrol edin
+- **Kontrol:** `/settings` > Rol Ayarları
 
-**Kullanım Örneği:**
-```
-/başvurustats kullanıcı:@başvuruçi
-```
+#### "Kanal Bulunamadı" Hatası
+- **Çözüm:** Kanal ID'lerini kontrol edin
+- **Kontrol:** `/setup` > Log Ayarları
 
-**Ne Yapar:**
-- Onaylanan başvuru sayısını gösterir
-- Reddedilen başvuru sayısını gösterir
-- Toplam başvuru sayısını gösterir
+#### Bot Yanıt Vermiyor
+- **Çözüm:** Bot izinlerini kontrol edin
+- **Kontrol:** Discord Developer Portal
 
----
-
-### `/başvurutop`
-**Açıklama:** En iyi başvuru performansını gösterir.
-
-**Yetki:** `Staff` rolü gerekli
-
-**Parametreler:** Yok
-
-**Kullanım Örneği:**
-```
-/başvurutop
-```
+### 📞 Destek
+- **Discord:** [Sunucu Davet Linki]
+- **Website:** [Web Sitesi]
+- **Email:** [İletişim Email]
 
 ---
 
-### `/mulakatstats`
-**Açıklama:** Bir kullanıcının mülakat istatistiklerini gösterir.
-
-**Yetki:** `Staff` rolü gerekli
-
-**Parametreler:**
-- `kullanıcı` (zorunlu) - İstatistikleri görüntülenecek kullanıcı
-
-**Kullanım Örneği:**
-```
-/mulakatstats kullanıcı:@mülakatçi
-```
+## 📄 Lisans
+Bu proje özel kullanım içindir. Tüm hakları saklıdır.
 
 ---
 
-### `/mulakattop`
-**Açıklama:** En iyi mülakat performansını gösterir.
-
-**Yetki:** `Staff` rolü gerekli
-
-**Parametreler:** Yok
-
-**Kullanım Örneği:**
-```
-/mulakattop
-```
+## 👥 Katkıda Bulunanlar
+- **Geliştirici:** [İsim]
+- **Tasarım:** [İsim]
+- **Test:** [İsim]
 
 ---
 
-## ⚙️ Panel Komutları
-
-### `/system`
-**Açıklama:** Sistem yönetim paneli.
-
-**Yetki:** `Owner` rolü gerekli
-
-**Parametreler:** Yok
-
-**Kullanım Örneği:**
-```
-/system
-```
-
-**Ne Yapar:**
-- Sistem yönetim panelini açar
-- Otorol ayarları butonu ekler
-- Diğer sistem ayarları için butonlar sunar
-
----
-
-### `/topreset`
-**Açıklama:** İstatistik sıfırlama paneli.
-
-**Yetki:** `Owner` rolü gerekli
-
-**Parametreler:** Yok
-
-**Kullanım Örneği:**
-```
-/topreset
-```
-
-**Ne Yapar:**
-- İstatistik sıfırlama butonları sunar
-- Mülakat istatistiklerini sıfırlama
-- Başvuru istatistiklerini sıfırlama
-- Destek istatistiklerini sıfırlama
-
----
-
-## 📊 İstatistik Komutları
-
-### Genel İstatistik Bilgileri
-
-Tüm istatistik komutları MongoDB veritabanından veri çeker ve aşağıdaki bilgileri gösterir:
-
-**Başvuru İstatistikleri:**
-- Onaylanan başvuru sayısı
-- Reddedilen başvuru sayısı
-- Toplam başvuru sayısı
-
-**Mülakat İstatistikleri:**
-- Onaylanan mülakat sayısı
-- Reddedilen mülakat sayısı
-- Toplam mülakat sayısı
-
-**Destek İstatistikleri:**
-- Toplam devralınan talep sayısı
-- Toplam kapatılan talep sayısı
-- Ortalama yanıt süresi
-
----
-
-## 🔧 Teknik Detaylar
-
-### Yetki Sistemi
-- **Owner:** En yüksek yetki, tüm sistem ayarlarına erişim
-- **Supervisor:** İşletme, departman, organizasyon yönetimi
-- **Staff:** Rol verme/alma, istatistik görüntüleme
-- **Application:** Başvuru değerlendirme
-- **Interviewer:** Mülakat değerlendirme
-- **Support:** Ticket sistemi yönetimi
-
-### Veritabanı Yapısı
-- **MongoDB:** İstatistik verileri için
-- **Collections:** `basvuruStats`, `mulakatStats`, `supportStats`
-- **İşletme/Departman/Organizasyon:** Ayrı koleksiyonlarda saklanır
-
-### Log Sistemi
-- Tüm işlemler ilgili log kanallarına kaydedilir
-- Embed formatında detaylı log bilgileri
-- Kullanıcı ID, tarih, işlem detayları dahil
-
-### Hata Yönetimi
-- Kapsamlı hata kontrolü
-- Kullanıcı dostu hata mesajları
-- Console logları ile debug bilgileri
-
----
-
-## 🚀 Kullanım İpuçları
-
-1. **Rol Renkleri:** Hex kodları kullanın (örn: FF0000 = kırmızı)
-2. **Otomatik Tamamlama:** İşletme/departman adları otomatik tamamlanır
-3. **Ephemeral Mesajlar:** Çoğu komut gizli yanıt verir (flags: 64)
-4. **Log Kanalları:** Tüm işlemler otomatik loglanır
-5. **Veritabanı:** MongoDB bağlantısı gerekli
-
----
-
-## 📝 Notlar
-
-- Tüm komutlar slash command formatında çalışır
-- Embed mesajları tutarlı tasarım kullanır
-- Türkçe karakter desteği tam
-- Responsive tasarım ve hata yönetimi
-- Detaylı log sistemi ile şeffaflık
-
----
-
-*Bu rehber FivemBOT'un tüm komutlarını kapsar. Komutları kullanmadan önce gerekli yetkilere sahip olduğunuzdan emin olun.*
+*Son güncelleme: 2025*
